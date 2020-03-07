@@ -1,4 +1,21 @@
-from setuptools import setup
+import setuptools
 
-config = {'setup_requires': ['pbr'], 'pbr': True}
-setup(**config)
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+setuptools.setup(
+    name="torchchem", # Replace with your own username
+    version="0.0.1",
+    author="torchchem contributors",
+    description="PyTorch models for deep chemistry",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/deepchem/torchchem",
+    packages=setuptools.find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    python_requires='>=3.6',
+)
