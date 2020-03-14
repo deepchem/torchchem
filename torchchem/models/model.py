@@ -1,16 +1,131 @@
-# -*- coding: utf-8 -*-
 """
-Created on Mon Mar 13 22:31:24 2017
-
-@author: Zhenqin Wu
+This file implements the base model for torchchem classes
 """
 
+import shutil
 import torch
 import time
 import numpy as np
-from deepchem.trans import undo_transforms
+import tempfile
+#from deepchem.trans import undo_transforms
 from deepchem.utils.save import log
-from deepchem.models import Model
+
+class Model(object):
+  """
+  Abstract base class for different ML models.
+  """
+
+  def __init__(self,
+               model_instance=None,
+               model_dir=None,
+               verbose=True,
+               **kwargs):
+    """Abstract class for all models.
+    Parameters:
+    -----------
+    model_instance: object
+      Wrapper around ScikitLearn/Keras/Tensorflow model object.
+    model_dir: str
+      Path to directory where model will be stored.
+    """
+    self.model_dir_is_temp = False
+    if model_dir is not None:
+      if not os.path.exists(model_dir):
+        os.makedirs(model_dir)
+    else:
+      model_dir = tempfile.mkdtemp()
+      self.model_dir_is_temp = True
+    self.model_dir = model_dir
+    self.model_instance = model_instance
+    self.model_class = model_instance.__class__
+
+    self.verbose = verbose
+
+  def __del__(self):
+    if 'model_dir_is_temp' in dir(self) and self.model_dir_is_temp:
+      shutil.rmtree(self.model_dir)
+
+  def fit_on_batch(self, X, y, w):
+    """
+    Updates existing model with new information.
+    """
+    raise NotImplementedError(
+        "Each model is responsible for its own fit_on_batch method.")
+
+  def predict_on_batch(self, X, **kwargs):
+    """
+    Makes predictions on given batch of new data.
+
+    Parameters
+    ----------
+    X: np.ndarray
+      Features
+    """
+    raise NotImplementedError(
+        "Each model is responsible for its own predict_on_batch method.")
+
+  def reload(self):
+    """
+    Reload trained model from disk.
+    """
+    raise NotImplementedError(
+        "Each model is responsible for its own reload method.")
+
+  def save(self):
+    """Dispatcher function for saving.
+
+    Each subclass is responsible for overriding this method.
+    """
+    raise NotImplementedError
+
+  def fit(self, dataset, nb_epoch=10, batch_size=50, **kwargs):
+    """
+    Fits a model on data in a Dataset object.
+    """
+    raise NotImplementedError
+
+  def predict(self, dataset, transformers=[], batch_size=None):
+    """
+    Uses self to make predictions on provided Dataset object.
+
+    Returns:
+      y_pred: numpy ndarray of shape (n_samples,)
+    """
+    raise NotImplementedError
+
+  def evaluate(self, dataset, metrics, transformers=[], per_task_metrics=False):
+    """
+    Evaluates the performance of this model on specified dataset.
+
+    Parameters
+    ----------
+    dataset: dc.data.Dataset
+      Dataset object.
+    metric: deepchem.metrics.Metric
+      Evaluation metric
+    transformers: list
+      List of deepchem.transformers.Transformer
+    per_task_metrics: bool
+      If True, return per-task scores.
+
+    Returns
+    -------
+    dict
+      Maps tasks to scores under metric.
+    """
+    raise NotImplementedError
+
+  def get_task_type(self):
+    """
+    Currently models can only be classifiers or regressors.
+    """
+    raise NotImplementedError
+
+  def get_num_tasks(self):
+    """
+    Get number of tasks.
+    """
+    raise NotImplementedError
 
 
 class MultitaskModel(Model):
@@ -153,7 +268,6 @@ class MultitaskModel(Model):
       for ind, (X_b, y_b, w_b, ids_b) in enumerate(
           # Turns out there are valid cases where we don't want pad-batches
           # on by default.
-          #dataset.iterbatches(batch_size, pad_batches=True)):
           dataset.iterbatches(self.batch_size, pad_batches=self.pad_batches)):
         if ind % log_every_N_batches == 0:
           log("On batch %d" % ind, self.verbose)

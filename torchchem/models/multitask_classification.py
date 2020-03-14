@@ -4,7 +4,7 @@
 
 import torch
 import numpy as np
-from deepchem.metrics import from_one_hot
+from torchchem.utils import from_one_hot
 from torchchem.models.model import MultitaskModel
 
 
