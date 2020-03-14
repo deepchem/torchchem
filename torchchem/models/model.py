@@ -9,6 +9,7 @@ import numpy as np
 import tempfile
 from torchchem.utils import log
 
+
 class Model(object):
   """
   Abstract base class for different ML models.
