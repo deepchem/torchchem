@@ -2,6 +2,7 @@ import unittest
 from torchchem.models import MultitaskClassification
 from torchchem.models import MultitaskRegression
 
+
 class TestMultitaskClassification(unittest.TestCase):
 
   def test_classification_init(self):

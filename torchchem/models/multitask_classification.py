@@ -105,8 +105,8 @@ class MultitaskClassification(MultitaskModel):
     loss = []
     for i in range(logit.size()[0]):
       loss.append(
-          torch.nn.functional.cross_entropy(logit[i, :], label[i].long()).mul(
-              weight[i]))
+          torch.nn.functional.cross_entropy(logit[i, :],
+                                            label[i].long()).mul(weight[i]))
     loss = torch.cat(loss).mean()
     return loss
 
