@@ -7,8 +7,7 @@ import torch
 import time
 import numpy as np
 import tempfile
-#from deepchem.trans import undo_transforms
-from deepchem.utils.save import log
+from torchchem.utils import log
 
 class Model(object):
   """
@@ -93,27 +92,27 @@ class Model(object):
     """
     raise NotImplementedError
 
-  def evaluate(self, dataset, metrics, transformers=[], per_task_metrics=False):
-    """
-    Evaluates the performance of this model on specified dataset.
+  #def evaluate(self, dataset, metrics, transformers=[], per_task_metrics=False):
+  #  """
+  #  Evaluates the performance of this model on specified dataset.
 
-    Parameters
-    ----------
-    dataset: dc.data.Dataset
-      Dataset object.
-    metric: deepchem.metrics.Metric
-      Evaluation metric
-    transformers: list
-      List of deepchem.transformers.Transformer
-    per_task_metrics: bool
-      If True, return per-task scores.
+  #  Parameters
+  #  ----------
+  #  dataset: dc.data.Dataset
+  #    Dataset object.
+  #  metric: deepchem.metrics.Metric
+  #    Evaluation metric
+  #  transformers: list
+  #    List of deepchem.transformers.Transformer
+  #  per_task_metrics: bool
+  #    If True, return per-task scores.
 
-    Returns
-    -------
-    dict
-      Maps tasks to scores under metric.
-    """
-    raise NotImplementedError
+  #  Returns
+  #  -------
+  #  dict
+  #    Maps tasks to scores under metric.
+  #  """
+  #  raise NotImplementedError
 
   def get_task_type(self):
     """

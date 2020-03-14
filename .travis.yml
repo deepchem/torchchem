@@ -14,7 +14,6 @@ install:
 - conda update -q conda
 - conda config --add channels http://conda.binstar.org/omnia
 - conda install pip
-- conda install -y -c deepchem -c rdkit -c conda-forge -c omnia deepchem=2.3.0
 - pip install nose
 - pip install yapf==0.22.0
 - pip install torch torchvision
