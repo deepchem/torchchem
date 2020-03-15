@@ -13,6 +13,7 @@ install:
 - conda config --set always_yes yes --set changeps1 no
 - conda update -q conda
 - conda config --add channels http://conda.binstar.org/omnia
+- conda install -y -q -c deepchem -c rdkit -c conda-forge -c omnia rdkit
 - conda install pip
 - pip install nose
 - pip install yapf==0.22.0
