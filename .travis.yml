@@ -1,0 +1,34 @@
+language: python
+python:
+- '3.6'
+- '3.7'
+sudo: required
+dist: xenial
+install:
+- wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O anaconda.sh;
+- export python_version=$TRAVIS_PYTHON_VERSION
+- bash anaconda.sh -b -p $HOME/anaconda
+- export PATH="$HOME/anaconda/bin:$PATH"
+- hash -r
+- conda config --set always_yes yes --set changeps1 no
+- conda update -q conda
+- conda config --add channels http://conda.binstar.org/omnia
+- conda install -y -q -c deepchem -c rdkit -c conda-forge -c omnia rdkit
+- conda install pip
+- pip install nose
+- pip install yapf==0.22.0
+- pip install torch torchvision
+- pip install coveralls
+- pip install flaky
+- pip install pandas
+- python setup.py install
+script:
+- nosetests -q --with-flaky -a '!slow' --with-coverage --cover-package=torchchem
+  -v torchchem --nologcapture
+- if [ $TRAVIS_PYTHON_VERSION == '3.7' ]; then
+      find ./torchchem | grep .py$ |xargs python -m doctest -v;
+  fi
+- bash devtools/travis-ci/test_format_code.sh
+after_success:
+- echo $TRAVIS_SECURE_ENV_VARS
+- coveralls
