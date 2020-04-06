@@ -14,7 +14,7 @@ by Zhenpeng Zhou, Steven Kearnes, Li Li, Richard N. Zare and Patrick Riley.
    
 2) Clone this repository.  
    `https://github.com/deepchem/torchchem.git`  
-   `cd MolDQN-pytorch`
+   `cd contrib/MolDQN`
    
 3) Install the requirements given in `requirements.txt`.  
    `pip install -r requirements.txt`  
