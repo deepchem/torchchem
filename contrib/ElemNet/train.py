@@ -54,7 +54,7 @@ def train(train_X, train_y):
       loss = criterion(output, y.float())
       train_loss.append(loss.item())
 
-      if i % 5 == 0:
+      if i % 200 == 0:
         print("Batch {}".format(i))
 
       loss.backward()
