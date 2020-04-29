@@ -45,7 +45,6 @@ def train(train_X, train_y):
       X, y = data
       X = X.to(device)
       y = y.to(device)
-
       model = model.to(device)
 
       optimizer.zero_grad()
@@ -91,15 +90,15 @@ def test(test_X, test_y):
 
 
 if __name__ == '__main__':
-  df_train = pd.read_csv("data/train_set.csv")[:500]
-  df_test = pd.read_csv("data/test_set.csv")[:100]
+  df_train = pd.read_csv("data/train_set.csv")
+  df_test = pd.read_csv("data/test_set.csv")
 
   labels = df_train.columns[-1]
 
-  train_X = df_train[elements_tl].as_matrix()
-  train_y = df_train[labels].as_matrix()
-  test_X = df_test[elements_tl].as_matrix()
-  test_y = df_test[labels].as_matrix()
+  train_X = df_train[elements_tl].values
+  train_y = df_train[labels].values
+  test_X = df_test[elements_tl].values
+  test_y = df_test[labels].values
 
   train(train_X, train_y)
   test(test_X, test_y)
