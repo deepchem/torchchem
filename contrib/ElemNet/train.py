@@ -7,7 +7,7 @@ import numpy as np
 
 from model import ElemNet
 
-EPOCHS = 50
+EPOCHS = 100
 BATCH_SIZE = 32
 LEARNING_RATE = 0.0001
 
